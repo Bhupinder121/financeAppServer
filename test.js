@@ -10,5 +10,13 @@ let command = "CREATE TABLE `financeapp`.`test_month` (\
     `exp` INT NULL,\
     PRIMARY KEY (`dayID`));"
 
-update()
 
+
+connector.query(`SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE "month_%"`, (err, rows, fields) => {
+    if (!err) {
+        console.log(rows)
+    }
+    else {
+        console.log(err);
+    }
+})
