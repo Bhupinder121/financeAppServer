@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const encryption = require('D:/Projects/encrypt/encrypt_decrypt.js');
+const encryption = require('./encrypt_decrypt.js');
 const sqlConnection = require("./connector.js");
 
 let app = express();
