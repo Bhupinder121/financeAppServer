@@ -18,16 +18,26 @@ app.listen(420, ()=>{
 
 
 app.get('/sendData', (req, res)=>{
-    let reqData = encryption.decrypt(req.query.data_query);
+    let reqData = req.query.data_query[0];
+    while(reqData.includes("t36i") || reqData.includes("8h3nk1") || reqData.includes("d3ink2")){
+        reqData = reqData.replace("t36i", "+").replace("8h3nk1", "/").replace("d3ink2", "=");
+    }
+    reqData = encryption.decrypt(reqData);
+ // add decryption
     if(reqData != ""){
         try{
-            getDBData(reqData, function(rows){
+            getDBData(reqData,function(rows){
                 for(var i = 0; i<rows.length; i++){
                     if(rows[i]["date"] != undefined){
                         rows[i]["date"] = rows[i]["date"].toLocaleString();
                     }
                 }
                 let encryptedString = encryption.encrypt(JSON.stringify(rows));
+                while(encryptedString.includes("+") || encryptedString.includes("/") || encryptedString.includes("=")){
+                    encryptedString = encryptedString.replace("+", "t36i").replace("/", "8h3nk1").replace("=", "d3ink2");
+                }
+                 // Add encryption 
+                
                 res.status(200).send(encryptedString);
             });
         }
@@ -38,7 +48,7 @@ app.get('/sendData', (req, res)=>{
 });
 
 app.post('/getData', (req, res)=>{
-    var encryptedString = req.body.nameValuePairs["json"];
+    var encryptedString = req.query["nameValuePairs"]["json"];
     let jsonData = JSON.parse(encryption.decrypt(encryptedString));
 
     if(jsonData["exp"] != undefined){
@@ -191,7 +201,7 @@ function getTableName(index = new Date().getMonth(), year = new Date().getFullYe
 }
 
 
-function getDBData(command, callback) {
+async function getDBData(command, callback) {
     sqlConnection.query(command, (err, rows, fields) => {
         if (!err) {
             return callback(rows);
