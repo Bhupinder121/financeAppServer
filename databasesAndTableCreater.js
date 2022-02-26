@@ -1,27 +1,7 @@
-const mysql = require('mysql');
 let tableListRemainder = [];
 let tableListFinance = [];
-let remainderTables = ["task_table", "notdonetask_table", "books_table", "quotes_table", "pages_table"]
-let financeTables = ["exp_category"];
-
-var sqlConnection = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "bhupinder@1234",
-    database: "sys",
-    multipleStatements: true
-});
-
-sqlConnection.connect((err) => {
-    if (!err) {
-        console.log("connected");
-
-    }
-    else {
-        console.log(err);
-        console.log("Not connected");
-    }
-});
+let remainderTables = ["task_table", "notdonetask_table", "books_table", "quotes_table", "pages_table"];
+const sqlConnection = require('./connector.js')
 
 
 checkDatabase((state)=>{
@@ -49,10 +29,11 @@ function checkFinanceTales(){
         }
         if(!tableListFinance.includes("exp_category")){
             let command = "CREATE TABLE `financeapp`.`exp_category` (\n\
-                `date` DATE NOT NULL,\n\
+                `ID` INT NOT NULL AUTO_INCREMENT,\n\
+                `date` DATE NULL,\n\
                 `ExpAmt` INT NULL,\n\
                 `ExpCate` VARCHAR(255) NULL,\n\
-                PRIMARY KEY (`date`))";
+                PRIMARY KEY (`ID`))";
             postData(command);
         }
     });
@@ -105,7 +86,7 @@ function checkRemainderTables(){
                             `bookID` INT NOT NULL AUTO_INCREMENT,\n\
                             `bookName` VARCHAR(255) NULL,\n\
                             `bookPages` INT NULL,\n\
-                            `isSend` TINYINT NULL,\n\
+                            `isDone` TINYINT NULL,\n\
                             PRIMARY KEY (`bookID`))";
                         break;
                     case "pages_table":
@@ -180,3 +161,4 @@ function postData(command) {
         }
     });
 }
+
