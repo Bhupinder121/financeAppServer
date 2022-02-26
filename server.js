@@ -18,7 +18,7 @@ app.listen(420, ()=>{
 
 
 app.get('/sendData', (req, res)=>{
-    let reqData = req.query.data_query[0];
+    let reqData = req.query.data_query;
     while(reqData.includes("t36i") || reqData.includes("8h3nk1") || reqData.includes("d3ink2")){
         reqData = reqData.replace("t36i", "+").replace("8h3nk1", "/").replace("d3ink2", "=");
     }
